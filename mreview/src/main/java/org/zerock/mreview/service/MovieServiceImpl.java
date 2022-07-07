@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -102,6 +103,16 @@ public class MovieServiceImpl implements MovieService{
         movieRepository.deleteById(mno);
     }
 
+    public List<MovieImageDTO> getListImage(Long mno) {
+
+        MovieDTO list = getMovie(mno);
+
+        List<MovieImageDTO> result = list.getImageDTOList();
+
+        return result;
+
+    }
+
     @Transactional
     @Override
     public void modify(MovieDTO movieDTO) {
@@ -112,13 +123,17 @@ public class MovieServiceImpl implements MovieService{
 
         List<MovieImage> movieImageList = (List<MovieImage>) entityMap.get("imgList");
 
+        movieImageList.forEach(movieImage -> {
+            imageRepository.save(movieImage);
+        });
+
         Long mno = movie.getMno();
 
         imageRepository.deleteByMovie(mno);
 
         movieRepository.save(movie);
 
-        imageRepository.saveAll(movieImageList);
+        //imageRepository.saveAll(movieImageList);
 
 
 

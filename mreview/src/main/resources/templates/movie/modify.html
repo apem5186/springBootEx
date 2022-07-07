@@ -69,7 +69,7 @@
 
         <div class="uploadResult">
             <ul>
-                <li th:each="movieImage: ${dto.imageDTOList}"
+                <!--<li th:each="movieImage: ${dto.imageDTOList}"
                     th:data-name="${movieImage.imgName}"
                     th:data-path="${movieImage.path}"
                     th:data-uuid="${movieImage.uuid}">
@@ -77,7 +77,7 @@
                         <button type="button" th:data-file="${movieImage.getImageURL()}" class="btn-warning btn-sm">X</button><br>
                         <img th:if="${movieImage.path != null}" th:src="|/display?fileName=${movieImage.getThumbnailURL()}|">
                     </div>
-                </li>
+                </li>-->
             </ul>
         </div>
 
@@ -88,6 +88,26 @@
                 var maxSize = 10485760; //10MB
                 var uploadUl = $(".uploadResult ul");
                 var mno = [[${dto.mno}]];
+
+                $.getJSON("/movie/"+mno, function (arr){
+                    var str = "";
+
+                    $.each(arr, function (i, obj){
+
+                        console.log(obj);
+
+                        str += "<li data-name='"+obj.imgName + "' data-path='"+obj.path+"' data-uuid='"+obj.uuid+"'>";
+                        str += " <div>";
+                        str += "<button type='button' data-file=\'"+obj.imageURL+"\' ";
+                        str += "class='btn-warning btn-sm'>X</button><br>";
+                        str += "<img src='/display?fileName="+obj.thumbnailURL + "'>";
+                        str += "</div>";
+                        str += "</li>";
+                    });
+
+                    $(uploadUl).html(str);
+                });
+
                 function checkExtension(fileName, fileSize) {
 
                     if(fileSize >= maxSize){

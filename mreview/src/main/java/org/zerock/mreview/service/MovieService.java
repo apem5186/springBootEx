@@ -20,6 +20,8 @@ public interface MovieService {
 
     MovieDTO getMovie(Long mno);
 
+    List<MovieImageDTO> getListImage(Long mno);
+
     void removeWithReplies(Long mno);   // 삭제 기능
 
     void modify(MovieDTO movieDTO);     // 수정 기능ㄴ
